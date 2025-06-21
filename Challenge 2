@@ -1,0 +1,69 @@
+import java.util.*;
+
+class SearchSuggestionSystem {
+    private List<String> products;
+    
+    public SearchSuggestionSystem(List<String> products) {
+        this.products = new ArrayList<>(products);
+        // Sort products lexicographically for efficient searching
+        Collections.sort(this.products);
+    }
+    
+    public List<List<String>> getSuggestions(String searchWord) {
+        List<List<String>> result = new ArrayList<>();
+        
+        // For each character in searchWord, build the prefix and find suggestions
+        for (int i = 1; i <= searchWord.length(); i++) {
+            String prefix = searchWord.substring(0, i);
+            List<String> suggestions = findSuggestions(prefix);
+            result.add(suggestions);
+        }
+        
+        return result;
+    }
+    
+    private List<String> findSuggestions(String prefix) {
+        List<String> suggestions = new ArrayList<>();
+        
+        // Find all products that start with the given prefix
+        for (String product : products) {
+            if (product.startsWith(prefix)) {
+                suggestions.add(product);
+                // Only return up to 3 suggestions
+                if (suggestions.size() == 3) {
+                    break;
+                }
+            }
+        }
+        
+        return suggestions;
+    }
+}
+
+// Test class to demonstrate the functionality
+class TestSearchSuggestionSystem {
+    public static void main(String[] args) {
+        // Test with the given example
+        List<String> products = Arrays.asList("mobile", "mouse", "moneypot", "monitor", "mousepad");
+        SearchSuggestionSystem system = new SearchSuggestionSystem(products);
+        
+        String searchWord = "mouse";
+        List<List<String>> suggestions = system.getSuggestions(searchWord);
+        
+System.out.println("Input products: - Untitled-1:54 - public class Main {.java:53" + products);
+System.out.println("Search word: - Untitled-1:55 - public class Main {.java:54" + searchWord);
+System.out.println("Output: - Untitled-1:56 - public class Main {.java:55");
+        
+        for (int i = 0; i < suggestions.size(); i++) {
+            String prefix = searchWord.substring(0, i + 1);
+System.out.println("Prefix ' - Untitled-1:60 - public class Main {.java:59" + prefix + "': " + suggestions.get(i));
+        }
+        
+        // Expected output:
+        // Prefix 'm': [mobile, moneypot, monitor]
+        // Prefix 'mo': [mobile, moneypot, monitor]  
+        // Prefix 'mou': [mouse, mousepad]
+        // Prefix 'mous': [mouse, mousepad]
+        // Prefix 'mouse': [mouse, mousepad]
+    }
+}
